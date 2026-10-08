@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Pathfinding Demo</title>
+    <style>
+        body {
+            background-color: black;
+            overflow: hidden;
+            margin: 0px;
+            display: flex;
+            flex-direction: row;
+            box-sizing: border-box;
+        }
+
+        canvas {
+            padding: 0px;
+            box-sizing: border-box;
+        }
+
+        #scroller1 {
+            width: 14vw;
+            height: 100vh;
+            display: flex;
+            box-sizing: border-box;
+        }
+
+        #uiList1 {
+            position: relative;
+
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: scroll;
+            scrollbar-width: none;
+            padding: 1vw;
+            padding-right: 0px;
+            width: 14vw;
+            box-sizing: border-box;
+        }
+
+        #scroller2 {
+            width: 14vw;
+            height: 100vh;
+            display: flex;
+            box-sizing: border-box;
+        }
+
+        #uiList2 {
+            position: relative;
+
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: scroll;
+            scrollbar-width: none;
+            padding: 1vw;
+            padding-left: 0px;
+            width: 14vw;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 8px 24px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #4365ff;
+            color: white;
+            transition: background 0.2s;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        p {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0px;
+            padding: 8px;
+            border: none;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="scroller1">
+        <div id="uiList1">
+            <button id="drawBtn" class="btn" onclick="drawMode='draw'; updateUi(); toClear = true;">Draw Wall</button>
+            <button id="eraseBtn" class="btn" onclick="drawMode='erase'; updateUi(); toClear = true;">Erase
+                Wall</button>
+            <button id="setStartBtn" class="btn" onclick="drawMode='setStart'; updateUi(); toClear = true;">Set
+                Start</button>
+            <button id="setTargetBtn" class="btn" onclick="drawMode='setTarget'; updateUi(); toClear = true;">Set
+                Target</button>
+            <br>
+            <br>
+            <button id="bfsBtn" class="btn" onclick="searchMode='bfs'; updateUi(); toClear = true;">Breadth-First
+                Search</button>
+            <button id="dfsBtn" class="btn" onclick="searchMode='dfs'; updateUi(); toClear = true;">Depth-First
+                Search</button>
+            <button id="dijkstraBtn" class="btn"
+                onclick="searchMode='dijkstra'; updateUi(); toClear = true;">Dijkstra</button>
+            <button id="aStarBtn" class="btn" onclick="searchMode='aStar'; updateUi(); toClear = true;">A-Star</button>
+            <br>
+            <br>
+            <button id="singleDirBtn" class="btn" onclick="directionalMode='single'; updateUi(); toClear = true;">Single
+                Direction</button>
+            <button id="biDirBtn" class="btn"
+                onclick="directionalMode='double'; updateUi(); toClear = true;">Bidirectional</button>
+            <br>
+            <br>
+            <button id="startSearchBtn" class="btn" onclick='
+            searchRunning = !searchRunning;
+
+            if (searchRunning) {
+                grid.clearTemp();
+                isNotClear = false;
+                toClear = false;
+
+                pathLenText.textContent = "Path Length: ";
+
+                if (searchMode === "bfs") {
+                    if(directionalMode=="single") {
+                        activeSearch = new BFS(grid, startPos, targetPos);
+                    } else {
+                        activeSearch = new BidirectionalBFS(grid, startPos, targetPos);
+                    }
+                } else if (searchMode === "dfs") {
+                    if(directionalMode=="single") {
+                        activeSearch = new DFS(grid, startPos, targetPos);
+                    } else {
+                        activeSearch = new BidirectionalDFS(grid, startPos, targetPos);
+                    }
+                } else if (searchMode === "dijkstra") {
+                    if(directionalMode=="single") {
+                        activeSearch = new Dijkstra(grid, startPos, targetPos);
+                    } else {
+                        activeSearch = new BidirectionalDijkstra(grid, startPos, targetPos);
+                    }
+                } else if (searchMode === "aStar") {
+                    if(directionalMode=="single") {
+                        activeSearch = new AStar(grid, startPos, targetPos);
+                    } else {
+                        activeSearch = new BidirectionalAStar(grid, startPos, targetPos);
+                    }
+                }
+            }
+            updateUi();
+        '>Start Search</button>
+        </div>
+    </div>
+
+    <canvas id="mainCanvas"></canvas>
+
+    <div id="scroller2">
+        <div id="uiList2">
+            <p id="nodesProcessedText">Nodes Processed: </p>
+            <p id="pathLenText">Path Length: </p>
+
+            <br>
+
+            <button class="btn" onclick="resetGrid()">Reset Grid</button>
+            <button class="btn" onclick="genMaze()"> Generate Maze</button>
+        </div>
+    </div>
+
+    <script src="grid.js"></script>
+    <script src="bfs.js"></script>
+    <script src="dfs.js"></script>
+    <script src="dijkstra.js"></script>
+    <script src="aStar.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>
